@@ -1,54 +1,72 @@
-# React + TypeScript + Vite
+<h1>SoJazzy</h1>
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+감성적인 재즈 음악 + 백색소음 믹스 플레이어
+Jamendo API를 통해 재즈 음악을 스트리밍하고,  
+사용자가 직접 재생, 볼륨, 위치 등을 조절할 수 있는 감성 웹앱입니다.
 
-Currently, two official plugins are available:
+프로젝트 시작일: 2025.03.28  
+배포 주소: https://seapearl98.github.io/SoJazzy/
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+<h3>주요 기능</h3>
 
-## Expanding the ESLint configuration
+- 재즈 음악 스트리밍 재생
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+  - Jamendo API를 이용해 재즈 트랙 불러오기
+  - 곡 제목 및 아티스트 정보 표시
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+- 재생 / 일시정지 토글
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+  - 버튼을 눌러 현재 곡 재생 상태를 토글 가능
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- 볼륨 조절 기능
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+  - range 슬라이더로 음량 실시간 조절 가능
+
+- 이전곡 / 다음곡 이동
+
+  - 곡 리스트 순서를 기억하고, 양방향 탐색 가능
+
+- 재생 위치 표시 및 조절 (Progress bar)
+
+  - 현재 재생 시간 / 전체 재생 시간 시각화
+  - 슬라이더로 재생 위치 직접 이동 가능
+
+- 재생 종료 시 자동 다음 곡으로 전환
+
+  - 현재 곡이 끝나면 자동으로 다음 곡 재생
+
+- 현재 재생 중인 곡 기억 (localStorage)
+  - 새로고침해도 마지막 곡부터 이어서 재생 가능
+
+---
+
+<h3>사용 기술</h3>
+
+- Frontend: Vite + React + TypeScript
+- Audio: HTMLAudioElement API
+- API: [Jamendo Open API](https://developer.jamendo.com/)
+- 배포: GitHub Pages + gh-pages CLI
+
+---
+
+<h3>설치 및 실행 방법</h3>
+
+# 1. 레포지토리 클론
+
+git clone https://github.com/seapearl98/SoJazzy.git
+cd SoJazzy
+
+# 2. 의존성 설치
+
+npm install
+
+# 3. 개발 서버 실행
+
+npm run dev
+
+---
+
+추가 예정 기능
+
+- 백색소음 믹스 기능 추가 (빗소리, 장작불 등)
+- Web Audio API 기반 이퀄라이저 시각화
