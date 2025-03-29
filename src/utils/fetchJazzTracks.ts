@@ -7,17 +7,22 @@ export const fetchJazzTracks = async () => {
     params: {
       client_id: CLIENT_ID,
       format: "json",
-      limit: 10,
-      tags: "jazz",
+      limit: 200,
+      tags: "jazz, smoothjazz",
       audioformat: "mp31",
       order: "popularity_total_desc",
+      include: "musicinfo",
     },
   });
 
-  return res.data.results.map((track: any) => ({
+  const allTracks = res.data.results.map((track) => ({
     id: track.id,
     title: track.name,
     artist: track.artist_name,
     url: track.audio,
+    genres: track.musicinfo?.tags?.genres || [],
+    moods: track.musicinfo?.tags?.vartags || [],
   }));
+
+  return allTracks;
 };

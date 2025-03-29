@@ -1,13 +1,7 @@
 import { fetchJazzTracks } from "./utils/fetchJazzTracks";
 
 import { useEffect, useState } from "react";
-
-interface Track {
-  id: string;
-  title: string;
-  artist: string;
-  url: string;
-}
+import Track from "./types/track";
 
 function App() {
   const [tracks, setTracks] = useState<Track[]>([]);
@@ -22,8 +16,9 @@ function App() {
   const [displayTime, setDisplayTime] = useState(0);
   const [duration, setDuration] = useState(0); // 총 길이
   useEffect(() => {
-    fetchJazzTracks().then((data) => {
+    fetchJazzTracks(["jazz", "smooth", "calm"]).then((data) => {
       setTracks(data);
+      console.log(data);
     });
     localStorage.setItem("currentTrackIndex", String(currentIndex));
   }, [currentIndex]);
