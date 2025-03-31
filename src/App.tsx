@@ -15,11 +15,17 @@ function App() {
   const [currentTime, setCurrentTime] = useState(0); // 현재 시간 (초 단위)
   const [displayTime, setDisplayTime] = useState(0);
   const [duration, setDuration] = useState(0); // 총 길이
+
+  // const [reverbOn, setReverbOn] = useState(false);
+
   useEffect(() => {
-    fetchJazzTracks(["jazz", "smooth", "calm"]).then((data) => {
+    fetchJazzTracks().then((data) => {
       setTracks(data);
       console.log(data);
     });
+  }, []);
+
+  useEffect(() => {
     localStorage.setItem("currentTrackIndex", String(currentIndex));
   }, [currentIndex]);
 

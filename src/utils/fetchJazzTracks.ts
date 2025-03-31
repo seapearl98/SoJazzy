@@ -15,7 +15,7 @@ export const fetchJazzTracks = async () => {
     },
   });
 
-  const allTracks = res.data.results.map((track) => ({
+  const allTracks = res.data.results.map((track: any) => ({
     id: track.id,
     title: track.name,
     artist: track.artist_name,
