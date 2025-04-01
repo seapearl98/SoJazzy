@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 
 const whiteNoises = [
   { id: "rain", label: "Rain", src: "sounds/rain.mp3" },

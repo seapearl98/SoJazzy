@@ -17,6 +17,7 @@ function App() {
   const [currentTime, setCurrentTime] = useState(0); // 현재 시간 (초 단위)
   const [displayTime, setDisplayTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [isSwitching, setIsSwitching] = useState(false);
 
   // const [reverbOn, setReverbOn] = useState(false);
 
@@ -37,7 +38,9 @@ function App() {
   }, [currentIndex]);
 
   const playTrack = (index: number) => {
-    if (!tracks[index]) return;
+    if (!tracks[index] || isSwitching) return;
+
+    setIsSwitching(true);
 
     if (index === currentIndex && audio) {
       if (isPlaying) {
@@ -47,10 +50,14 @@ function App() {
         audio.play();
         setIsPlaying(true);
       }
+      setTimeout(() => setIsSwitching(false), 300);
       return;
     }
 
-    audio?.pause(); // 기존 오디오 정지
+    if (audio) {
+      audio.pause();
+      audio.removeEventListener("ended", playNext);
+    }
 
     const newAudio = new Audio(tracks[index].url);
     newAudio.loop = false;
@@ -69,7 +76,12 @@ function App() {
     });
 
     newAudio.addEventListener("ended", playNext);
-    newAudio.play();
+    newAudio
+      .play()
+      .catch((err) => console.warn("play 실패:", err))
+      .finally(() => {
+        setIsSwitching(false); // 재생 완료되거나 실패해도 잠금 해제
+      });
     setAudio(newAudio);
     setIsPlaying(true);
     setCurrentIndex(index);
@@ -86,6 +98,7 @@ function App() {
     const prevIndex =
       (currentIndexRef.current - 1 + tracks.length) % tracks.length;
     playTrack(prevIndex);
+    setCurrentIndex(prevIndex);
   };
 
   const formatTime = (sec: number) => {
