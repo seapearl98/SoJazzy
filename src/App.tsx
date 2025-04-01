@@ -28,6 +28,10 @@ function App() {
 
   useEffect(() => {
     currentIndexRef.current = currentIndex;
+  }, [currentIndex, currentIndexRef]);
+
+  useEffect(() => {
+    currentIndexRef.current = currentIndex;
     localStorage.setItem("currentTrackIndex", String(currentIndex));
   }, [currentIndex]);
 
@@ -75,7 +79,7 @@ function App() {
     const nextIndex = (currentIndexRef.current + 1) % tracks.length;
     playTrack(nextIndex);
     setCurrentIndex(nextIndex);
-    // console.log("실행", nextIndex, currentIndex);
+    console.log("실행", nextIndex, currentIndex);
   };
 
   const playPrev = () => {
@@ -99,7 +103,9 @@ function App() {
       <h1>🎷 SoJazzy</h1>
       {tracks[currentIndex] && (
         <>
-          <h2>{tracks[currentIndex].title}</h2>
+          <h2>
+            {currentIndex}.{tracks[currentIndex].title}
+          </h2>
           <p>{tracks[currentIndex].artist}</p>
         </>
       )}
