@@ -2,6 +2,7 @@ import { fetchJazzTracks } from "./utils/fetchJazzTracks";
 
 import { useEffect, useRef, useState } from "react";
 import Track from "./types/track";
+import WhiteNoiseController from "./components/WhiteNoiseController";
 
 function App() {
   const [tracks, setTracks] = useState<Track[]>([]);
@@ -15,7 +16,7 @@ function App() {
   const currentIndexRef = useRef(currentIndex);
   const [currentTime, setCurrentTime] = useState(0); // 현재 시간 (초 단위)
   const [displayTime, setDisplayTime] = useState(0);
-  const [duration, setDuration] = useState(0); // 총 길이
+  const [duration, setDuration] = useState(0);
 
   // const [reverbOn, setReverbOn] = useState(false);
 
@@ -56,7 +57,6 @@ function App() {
     newAudio.volume = volume;
 
     newAudio.addEventListener("loadedmetadata", () => {
-      console.log("곡 로드됨");
       setCurrentTime(0);
       setDisplayTime(0);
       setDuration(newAudio.duration);
@@ -79,7 +79,7 @@ function App() {
     const nextIndex = (currentIndexRef.current + 1) % tracks.length;
     playTrack(nextIndex);
     setCurrentIndex(nextIndex);
-    console.log("실행", nextIndex, currentIndex);
+    // console.log("playNext 실행", nextIndex);
   };
 
   const playPrev = () => {
@@ -149,6 +149,7 @@ function App() {
           }
         }}
       />
+      <WhiteNoiseController />
     </div>
   );
 }
