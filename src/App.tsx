@@ -1,6 +1,6 @@
 import { fetchJazzTracks } from "./utils/fetchJazzTracks";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Track from "./types/track";
 
 function App() {
@@ -12,6 +12,7 @@ function App() {
     const saved = localStorage.getItem("currentTrackIndex");
     return saved ? Number(saved) : 0;
   });
+  const currentIndexRef = useRef(currentIndex);
   const [currentTime, setCurrentTime] = useState(0); // 현재 시간 (초 단위)
   const [displayTime, setDisplayTime] = useState(0);
   const [duration, setDuration] = useState(0); // 총 길이
@@ -21,11 +22,12 @@ function App() {
   useEffect(() => {
     fetchJazzTracks().then((data) => {
       setTracks(data);
-      console.log(data);
+      // console.log(data);
     });
   }, []);
 
   useEffect(() => {
+    currentIndexRef.current = currentIndex;
     localStorage.setItem("currentTrackIndex", String(currentIndex));
   }, [currentIndex]);
 
@@ -46,25 +48,23 @@ function App() {
     audio?.pause(); // 기존 오디오 정지
 
     const newAudio = new Audio(tracks[index].url);
+    newAudio.loop = false;
     newAudio.volume = volume;
-
-    setCurrentTime(0); // ✅ 상태도 즉시 0으로
-    setDisplayTime(0);
 
     newAudio.addEventListener("loadedmetadata", () => {
       console.log("곡 로드됨");
+      setCurrentTime(0);
+      setDisplayTime(0);
       setDuration(newAudio.duration);
     });
     newAudio.addEventListener("timeupdate", () => {
       const time = newAudio.currentTime;
       setCurrentTime(time);
-      setDisplayTime(time); // 이후는 실제 시간 따라가게
-
-      if (newAudio.duration && time >= newAudio.duration) {
-        playNext(); // 다음 곡으로
-      }
+      setDisplayTime(time);
+      // console.log(newAudio.ended);
     });
 
+    newAudio.addEventListener("ended", playNext);
     newAudio.play();
     setAudio(newAudio);
     setIsPlaying(true);
@@ -72,14 +72,15 @@ function App() {
   };
 
   const playNext = () => {
-    setCurrentTime(0);
-    const nextIndex = (currentIndex + 1) % tracks.length;
+    const nextIndex = (currentIndexRef.current + 1) % tracks.length;
     playTrack(nextIndex);
+    setCurrentIndex(nextIndex);
+    // console.log("실행", nextIndex, currentIndex);
   };
 
   const playPrev = () => {
-    setCurrentTime(0);
-    const prevIndex = (currentIndex - 1 + tracks.length) % tracks.length;
+    const prevIndex =
+      (currentIndexRef.current - 1 + tracks.length) % tracks.length;
     playTrack(prevIndex);
   };
 
