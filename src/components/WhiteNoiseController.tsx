@@ -20,9 +20,10 @@ const WhiteNoiseController = () => {
       setPlayingNoises((prev) => ({ ...prev, [id]: false }));
     } else {
       const audio = new Audio(src);
+      audio.play();
       audio.loop = true;
       audio.volume = volume;
-      audio.play();
+
       whiteNoiseRefs.current[id] = audio;
       setPlayingNoises((prev) => ({ ...prev, [id]: true }));
     }
