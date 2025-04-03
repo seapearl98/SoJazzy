@@ -26,11 +26,15 @@ const WhiteNoiseController = () => {
       whiteNoiseRefs.current[id] = audio;
       setPlayingNoises((prev) => ({ ...prev, [id]: true }));
     }
+
+    console.log(whiteNoiseRefs.current[id], id);
   };
 
   useEffect(() => {
+    console.log(Object.values(whiteNoiseRefs.current));
+
     Object.values(whiteNoiseRefs.current).forEach((audio) => {
-      if (audio) audio.volume = volume;
+      if (audio && !audio.paused) audio.volume = volume;
     });
   }, [volume]);
 
