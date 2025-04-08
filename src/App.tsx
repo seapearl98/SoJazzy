@@ -37,6 +37,28 @@ function App() {
     localStorage.setItem("currentTrackIndex", String(currentIndex));
   }, [currentIndex]);
 
+  const setupNewAudio = (index: number) => {
+    const newAudio = new Audio(tracks[index].url);
+    newAudio.loop = false;
+    newAudio.volume = volume;
+
+    newAudio.addEventListener("loadedmetadata", () => {
+      setCurrentTime(0);
+      setDisplayTime(0);
+      setDuration(newAudio.duration);
+      newAudio.volume = volume; // 메타데이터 로드 후에도 볼륨 설정
+    });
+
+    newAudio.addEventListener("timeupdate", () => {
+      const time = newAudio.currentTime;
+      setCurrentTime(time);
+      setDisplayTime(time);
+    });
+
+    newAudio.addEventListener("ended", playNext);
+    return newAudio;
+  };
+
   const playTrack = (index: number) => {
     if (!tracks[index] || isSwitching) return;
 
@@ -59,23 +81,7 @@ function App() {
       audio.removeEventListener("ended", playNext);
     }
 
-    const newAudio = new Audio(tracks[index].url);
-    newAudio.loop = false;
-    newAudio.volume = volume;
-
-    newAudio.addEventListener("loadedmetadata", () => {
-      setCurrentTime(0);
-      setDisplayTime(0);
-      setDuration(newAudio.duration);
-    });
-    newAudio.addEventListener("timeupdate", () => {
-      const time = newAudio.currentTime;
-      setCurrentTime(time);
-      setDisplayTime(time);
-      // console.log(newAudio.ended);
-    });
-
-    newAudio.addEventListener("ended", playNext);
+    const newAudio = setupNewAudio(index);
     newAudio
       .play()
       .catch((err) => console.warn("play 실패:", err))
