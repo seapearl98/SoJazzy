@@ -32,7 +32,7 @@ const WhiteNoiseController = () => {
   };
 
   useEffect(() => {
-    console.log(Object.values(whiteNoiseRefs.current));
+    // console.log(Object.values(whiteNoiseRefs.current));
 
     Object.values(whiteNoiseRefs.current).forEach((audio) => {
       if (audio && !audio.paused) audio.volume = volume;

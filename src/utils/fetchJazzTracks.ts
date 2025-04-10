@@ -22,6 +22,7 @@ export const fetchJazzTracks = async () => {
     url: track.audio,
     genres: track.musicinfo?.tags?.genres || [],
     moods: track.musicinfo?.tags?.vartags || [],
+    duration: track.duration,
   }));
 
   return allTracks;

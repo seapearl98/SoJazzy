@@ -24,7 +24,7 @@ function App() {
   useEffect(() => {
     fetchJazzTracks().then((data) => {
       setTracks(data);
-      // console.log(data);
+      console.log(currentIndex);
     });
   }, []);
 
@@ -63,6 +63,11 @@ function App() {
     if (!tracks[index] || isSwitching) return;
 
     setIsSwitching(true);
+
+    // 초기 상태 설정
+    setCurrentTime(0);
+    setDisplayTime(0);
+    setDuration(0);
 
     if (index === currentIndex && audio) {
       if (isPlaying) {
@@ -146,7 +151,10 @@ function App() {
           style={{ width: "30%", marginTop: "1rem" }}
         />
         <span>
-          {formatTime(currentTime)} / {formatTime(duration)}
+          {formatTime(currentTime)} /{" "}
+          {tracks[currentIndex] && (
+            <>{formatTime(tracks[currentIndex].duration)}</>
+          )}
         </span>
       </div>
       <button onClick={playPrev}>⏮</button>
