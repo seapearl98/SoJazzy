@@ -5,6 +5,7 @@ import Track from "./types/track";
 import WhiteNoiseController from "./components/WhiteNoiseController";
 import useAudioPlayer from "./hooks/useAudioPlayer";
 import { getSavedTrackIndex, saveTrackIndex } from "./utils/storage";
+import PlayerUi from "./components/PlayerUi";
 
 function App() {
   const [tracks, setTracks] = useState<Track[]>([]);
@@ -38,68 +39,30 @@ function App() {
     saveTrackIndex(currentIndex);
   }, [currentIndex]);
 
-  const formatTime = (sec: number) => {
-    const m = Math.floor(sec / 60)
-      .toString()
-      .padStart(2, "0");
-    const s = Math.floor(sec % 60)
-      .toString()
-      .padStart(2, "0");
-    return `${m}:${s}`;
-  };
-
   return (
     <div>
       <h1>🎷 SoJazzy</h1>
       {track && (
-        <>
-          <h2>
-            {currentIndex}.{track.title}
-          </h2>
-          <p>{track.artist}</p>
-        </>
-      )}
-      <div>
-        <input
-          type="range"
-          min={0}
-          max={duration}
-          step={0.1}
-          value={displayTime}
-          onChange={(e) => {
-            const newTime = parseFloat(e.target.value);
-            setDisplayTime(newTime); // 슬라이더 즉시 반응
-            if (audio) {
-              audio.currentTime = newTime;
-              setCurrentTime(newTime); // 동기화
-            }
-          }}
-          style={{ width: "30%", marginTop: "1rem" }}
+        <PlayerUi
+          //트랙정보
+          track={track}
+          currentIndex={currentIndex}
+          //재생상태
+          isPlaying={isPlaying}
+          currentTime={currentTime}
+          displayTime={displayTime}
+          duration={duration}
+          volume={volume}
+          audio={audio}
+          //제어함수
+          setDisplayTime={setDisplayTime}
+          setCurrentTime={setCurrentTime}
+          setVolume={setVolume}
+          playTrack={playTrack}
+          playNext={playNext}
+          playPrev={playPrev}
         />
-        <span>
-          {formatTime(currentTime)} /{" "}
-          {track && <>{formatTime(track.duration)}</>}
-        </span>
-      </div>
-      <button onClick={playPrev}>⏮</button>
-      <button onClick={() => playTrack(currentIndex)}>
-        {isPlaying ? "⏸" : "▶"}
-      </button>
-      <button onClick={playNext}>⏭</button>
-      <input
-        type="range"
-        min="0"
-        max="1"
-        step="0.01"
-        value={volume}
-        onChange={(e) => {
-          const newVolume = parseFloat(e.target.value);
-          setVolume(newVolume);
-          if (audio) {
-            audio.volume = newVolume;
-          }
-        }}
-      />
+      )}
       <WhiteNoiseController />
     </div>
   );
