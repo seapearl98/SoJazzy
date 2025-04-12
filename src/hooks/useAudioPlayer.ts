@@ -13,12 +13,27 @@ const useAudioPlayer = (
   const [displayTime, setDisplayTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isSwitching, setIsSwitching] = useState(false);
+  const [soundOff, setSoundOff] = useState(false);
+  const previousVolumeRef = useRef(0.5);
 
   const currentIndexRef = useRef(currentIndex);
 
   useEffect(() => {
     currentIndexRef.current = currentIndex;
   }, [currentIndex]);
+
+  useEffect(() => {
+    if (audio) {
+      if (soundOff) {
+        previousVolumeRef.current = volume;
+        audio.volume = 0;
+        setVolume(0);
+      } else {
+        audio.volume = previousVolumeRef.current;
+        setVolume(previousVolumeRef.current);
+      }
+    }
+  }, [soundOff, audio]);
 
   const setupNewAudio = (index: number) => {
     const newAudio = new Audio(tracks[index].url);
@@ -47,20 +62,21 @@ const useAudioPlayer = (
     if (!tracks[index] || isSwitching) return;
     setIsSwitching(true);
 
-    setCurrentTime(0);
-    setDisplayTime(0);
-    setDuration(0);
-
     if (index === currentIndex && audio) {
       if (isPlaying) {
         audio.pause();
         setIsPlaying(false);
+        console.log(currentTime);
       } else {
         audio.play();
         setIsPlaying(true);
       }
       setTimeout(() => setIsSwitching(false), 300);
       return;
+    } else {
+      setCurrentTime(0);
+      setDisplayTime(0);
+      // setDuration(0);
     }
 
     if (audio) {
@@ -108,6 +124,8 @@ const useAudioPlayer = (
     audio,
     volume,
     setVolume,
+    soundOff,
+    setSoundOff,
   };
 };
 

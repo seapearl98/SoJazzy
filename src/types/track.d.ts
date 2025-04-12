@@ -6,6 +6,7 @@ interface Track {
   genres: string[];
   moods: string[];
   duration: number;
+  image: string;
 }
 
 export default Track;
