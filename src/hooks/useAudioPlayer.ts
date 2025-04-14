@@ -32,6 +32,7 @@ const useAudioPlayer = (
         audio.volume = previousVolumeRef.current;
         setVolume(previousVolumeRef.current);
       }
+      console.log(soundOff, volume);
     }
   }, [soundOff, audio]);
 
@@ -66,17 +67,13 @@ const useAudioPlayer = (
       if (isPlaying) {
         audio.pause();
         setIsPlaying(false);
-        console.log(currentTime);
+        // console.log(currentTime);
       } else {
         audio.play();
         setIsPlaying(true);
       }
       setTimeout(() => setIsSwitching(false), 300);
       return;
-    } else {
-      setCurrentTime(0);
-      setDisplayTime(0);
-      // setDuration(0);
     }
 
     if (audio) {
@@ -98,14 +95,17 @@ const useAudioPlayer = (
   };
 
   const playNext = () => {
+    setCurrentTime(0);
+    setDisplayTime(0);
     const nextIndex = (currentIndexRef.current + 1) % tracks.length;
     playTrack(nextIndex);
     setCurrentIndex(nextIndex);
   };
 
   const playPrev = () => {
-    const prevIndex =
-      (currentIndexRef.current - 1 + tracks.length) % tracks.length;
+    setCurrentTime(0);
+    setDisplayTime(0);
+    const prevIndex = (currentIndexRef.current - 1) % tracks.length;
     playTrack(prevIndex);
     setCurrentIndex(prevIndex);
   };

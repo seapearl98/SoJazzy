@@ -59,11 +59,11 @@ const PlayerUi = ({
   if (!track) return null;
 
   return (
-    <div className="flex flex-col items-center text-center backdrop-blur-md bg-white/30 rounded-2xl shadow-lg text-zinc-800 pt-24 pb-24 w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl mx-auto">
+    <div className="flex flex-col items-center justify-center pl-12 pr-12">
       <img
         src={track.image}
         alt={`${track.title} cover`}
-        className="w-48 h-48 sm:w-56 sm:h-56 md:w-60 md:h-60 object-cover rounded-2xl shadow-lg mb-4"
+        className="min-w-48 w-48 h-48 sm:w-56 sm:h-56 md:w-60 md:h-60 object-cover rounded-2xl shadow-lg mb-4"
       />
       <h2 className="text-lg sm:text-xl md:text-2xl font-bold mb-0 sm:mb-1">
         {track.title}
@@ -101,9 +101,9 @@ const PlayerUi = ({
           <span>{track && <>{formatTime(track.duration)}</>}</span>
         </span>
       </div>
-      <div className="flex items-center gap-6 mb-4">
+      <div className=" w-full flex items-center justify-center mb-4">
         <button
-          className="text-xl sm:text-2xl hover:scale-110 transition"
+          className="text-xl sm:text-2xl hover:scale-110 transition mr-4 ml-0 sm:ml-8"
           onClick={playPrev}
         >
           <TbPlayerSkipBackFilled />
@@ -115,41 +115,54 @@ const PlayerUi = ({
           {isPlaying ? <IoPause /> : <TbPlayerPlayFilled />}
         </button>
         <button
-          className="text-xl sm:text-2xl scale-110 transition"
+          className="text-xl ml-4 sm:text-2xl scale-110 transition"
           onClick={playNext}
         >
           <TbPlayerSkipForwardFilled />
         </button>
-      </div>
-      <div className="flex">
-        <button onClick={() => soundHandler(soundOff)} className="mr-2">
-          {soundOff ? (
-            <HiMiniSpeakerXMark className="text-3xl" />
-          ) : (
-            <HiMiniSpeakerWave className="text-3xl" />
-          )}
-        </button>
-        <input
-          type="range"
-          min="0"
-          max="1"
-          step="0.01"
-          value={volume}
-          onChange={(e) => {
-            const newVolume = parseFloat(e.target.value);
-            setVolume(newVolume);
-            if (audio) {
-              audio.volume = newVolume;
-            }
-
-            if (newVolume === 0) {
-              setSoundOff(true);
-            } else {
-              setSoundOff(false);
-            }
-          }}
-          className=" accent-zinc-400"
-        />
+        <div className="hidden sm:flex items-center group ml-4">
+          <button onClick={() => soundHandler(soundOff)} className="mr-1">
+            {soundOff ? (
+              <HiMiniSpeakerXMark className="text-2xl" />
+            ) : (
+              <HiMiniSpeakerWave className="text-2xl" />
+            )}
+          </button>
+          <div
+            className="relative h-1 bg-white/50 rounded-xl w-0 origin-left
+              transition-all duration-300 ease-in-out
+              group-hover:w-16"
+          >
+            <input
+              type="range"
+              min="0"
+              max="1"
+              step="0.01"
+              value={volume}
+              onChange={(e) => {
+                const newVolume = parseFloat(e.target.value);
+                setVolume(newVolume);
+                if (audio) {
+                  audio.volume = newVolume;
+                }
+                if (newVolume === 0) {
+                  setSoundOff(true);
+                } else {
+                  setSoundOff(false);
+                }
+              }}
+              className="range_custom absolute left-0 top-0 h-full w-full opacity-0"
+            />
+            <span
+              className="absolute left-0 top-0 bottom-0 h-full bg-slate-600 rounded-xl pointer-events-none"
+              style={{
+                width: `${volume * 100}%`,
+              }}
+            >
+              <span className="absolute -right-1 -top-1 w-3 h-3 bg-slate-600 rounded-lg pointer-events-none scale-0 transition-all duration-300 ease-in-out group-hover:scale-100"></span>
+            </span>
+          </div>
+        </div>
       </div>
     </div>
   );
