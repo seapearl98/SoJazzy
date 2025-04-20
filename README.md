@@ -68,5 +68,11 @@ npm run dev
 
 추가 예정 기능
 
-- 백색소음 믹스 기능 추가 (빗소리, 장작불 등)
-- Web Audio API 기반 이퀄라이저 시각화
+- 전체 음악 라이브러리 페이지
+  •	Jamendo API에서 받은 트랙을 무한 스크롤
+- 좋아요 모아보기 페이지
+  •	‘좋아요’로 표시한 트랙만 필터링해 별도 경로(/favorites)에 렌더
+	•	(AJAX · 쓰기) POST /favorites, DELETE /favorites/{id} — json‑server 또는 Supabase
+- 싫어요 & 즉시 제거 기능
+  •	‘싫어요’ 버튼 클릭 시 라이브러리에서 해당 트랙이 즉시 사라지는 Optimistic UI
+	•	(AJAX · 쓰기) POST /dislikes → 실패 시 롤백
